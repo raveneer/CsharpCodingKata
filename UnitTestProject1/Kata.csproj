@@ -52,6 +52,7 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="HouseNumberSum.cs" />
     <Compile Include="Reverse words.cs" />
     <Compile Include="Opposite number.cs" />
     <Compile Include="EqualSidesOfAnArray.cs" />
