@@ -52,6 +52,12 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Reverse words.cs" />
+    <Compile Include="Opposite number.cs" />
+    <Compile Include="EqualSidesOfAnArray.cs" />
+    <Compile Include="wrongEnd.cs" />
+    <Compile Include="PrinterErrors.cs" />
+    <Compile Include="UnitTest2.cs" />
     <Compile Include="UnitTest1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
