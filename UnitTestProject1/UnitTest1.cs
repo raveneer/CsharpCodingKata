@@ -1,7 +1,8 @@
 ﻿using NUnit.Framework;
-using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using System.Text;
 
 namespace Kata
 {
@@ -112,6 +113,31 @@ namespace GausNeddHelp
             }
 
             return (n * (n + 1)) / 2;
+        }
+
+        public void Mutate(int number)
+        {
+            //guard
+            if (number > 100) return;
+
+            number++;
+        }
+
+        public void Mutate2(int number)
+        {
+            //guard
+            if (number > 100)
+            {
+                return;
+            }
+
+            number++;
+        }
+
+        public void Mutate3(int number)
+        {
+            Debug.Assert(number <= 100);
+            number++;
         }
     }
 }
@@ -226,6 +252,162 @@ namespace ReverseLetter
         {
             var charArray = str.ToCharArray().Reverse().Where(char.IsLetter).ToArray();
             return new string(charArray);
+        }
+    }
+}
+
+namespace CompareStringsbySumofChars
+{
+    /*
+    Compare two strings by comparing the sum of their values (ASCII character code).
+    For comparing treat all letters as UpperCase
+    null/NULL/Nil/None should be treated as empty strings
+    If the string contains other characters than letters, treat the whole string as it would be empty
+    Your method should return true, if the strings are equal and false if they are not equal.
+    */
+
+    [TestFixture]
+    public class ComparingTests
+    {
+        [Test]
+        public void Compare()
+        {
+            Assert.AreEqual(true, Kata.Compare("AD", "BC"));
+            Assert.AreEqual(true, Kata.Compare("AD", "BC"));
+            Assert.AreEqual(true, Kata.Compare("gf", "FG"));
+            Assert.AreEqual(true, Kata.Compare("zz1", ""));
+            Assert.AreEqual(true, Kata.Compare("ZzZz", "ffPFF"));
+            Assert.AreEqual(true, Kata.Compare(null, ""));
+        }
+
+        [Test]
+        public void Test_GetAschiiValue()
+        {
+            Assert.AreEqual(0, Kata.GetAsciiIntValue(""));
+            Assert.AreEqual(0, Kata.GetAsciiIntValue("zz1"));
+        }
+    }
+
+    public static class Kata
+    {
+        public static bool Compare(string s1, string s2)
+        {
+            return GetAsciiIntValue(s1) == GetAsciiIntValue(s2);
+        }
+
+        public static int GetAsciiIntValue(string str)
+        {
+            if (string.IsNullOrEmpty(str) || !str.All(char.IsLetter))
+            {
+                return 0;
+            }
+            return Encoding.ASCII.GetBytes(str.ToUpper()).Sum(x => (int)x);
+        }
+    }
+}
+
+namespace HouseOfCats
+{
+    /*
+There are some people and cats in a house.
+You are given the number of legs they have all together.
+Your task is to return an array containing every possible number of people that could be in the house sorted in ascending order.
+It's guaranteed that each person has 2 legs and each cat has 4 legs.
+
+Example
+For legs = 6, the output should be [1, 3].
+There could be either 1 cat and 1 person (4 + 2 = 6) or 3 people (2 * 3 = 6).
+For legs = 2, the output should be [1].
+There can be only 1 person.
+
+        Input/Output
+[input] integer legs
+The total number of legs in the house.
+Constraints: 2 ≤ legs ≤ 100.
+[output] an integer array
+Every possible number of people that can be in the house.
+    */
+
+    [TestFixture]
+    public class myjinxin
+    {
+        [Test]
+        public void BasicTests()
+        {
+            var kata = new Kata();
+
+            Assert.AreEqual(new int[] { 1 }, kata.HouseOfCats(2));
+            Assert.AreEqual(new int[] { 0, 2 }, kata.HouseOfCats(4));
+            Assert.AreEqual(new int[] { 1, 3 }, kata.HouseOfCats(6));
+            Assert.AreEqual(new int[] { 0, 2, 4 }, kata.HouseOfCats(8));
+            Assert.AreEqual(new int[] { 0, 2 }, kata.HouseOfCats(4));
+            Assert.AreEqual(new int[] { 0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22 }, kata.HouseOfCats(44));
+        }
+
+        [Test]
+        public void Test_Enumerable()
+        {
+            Assert.AreEqual(new int[] { 1, 2, 3 }, Enumerable.Range(1, 3));
+        }
+    }
+
+    public class Kata
+    {
+        public int[] HouseOfCats(int legs)
+        {
+            var query = from number in Enumerable.Range(0, legs / 2 + 1)
+                        where ((legs - number * 2) % 4 == 0)
+                        select number;
+            return query.ToArray();
+        }
+    }
+}
+
+namespace Isograms
+{
+    /*
+아이소 그램은 반복되는 문자가 없거나 연속적이거나 연속적이지 않은 단어입니다.
+문자 만 포함하는 문자열이 isogram인지 여부를 결정하는 함수를 구현합니다.
+빈 문자열이 isogram이라고 가정합니다. 대소 문자를 무시하십시오.
+    */
+
+    [TestFixture]
+    public class BasicTests
+    {
+        private static IEnumerable<TestCaseData> testCases
+        {
+            get
+            {
+                yield return new TestCaseData("Dermatoglyphics").Returns(true);
+                yield return new TestCaseData("isogram").Returns(true);
+                yield return new TestCaseData("moose").Returns(false);
+                yield return new TestCaseData("isIsogram").Returns(false);
+                yield return new TestCaseData("aba").Returns(false);
+                yield return new TestCaseData("moOse").Returns(false);
+                yield return new TestCaseData("thumbscrewjapingly").Returns(true);
+                yield return new TestCaseData("").Returns(true);
+            }
+        }
+
+        [Test, TestCaseSource("testCases")]
+        public bool Test(string str) => Kata.IsIsogram(str);
+
+        [Test]
+        public void DistinctTest()
+        {
+            var str = "abacd";
+            var result = str.ToCharArray().Distinct();
+            Assert.AreEqual(new char[] { 'a', 'b', 'c', 'd' }, result.ToArray());
+        }
+    }
+
+    public class Kata
+    {
+        public static bool IsIsogram(string str)
+        {
+            var origianl = str.ToUpper().ToArray();
+            var distincted = str.ToUpper().Distinct().ToArray();
+            return origianl.Sum(x => char.GetNumericValue(x)) == distincted.Sum(x => char.GetNumericValue(x));
         }
     }
 }
