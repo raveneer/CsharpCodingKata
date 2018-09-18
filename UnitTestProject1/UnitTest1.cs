@@ -411,3 +411,98 @@ namespace Isograms
         }
     }
 }
+
+namespace TrollsAttack
+{
+    /*
+트롤들이 귀하의 코멘트 섹션을 공격하고 있습니다!
+이 상황을 처리하는 일반적인 방법은 트롤의 의견에서 모든 모음을 제거하여 위협을 중화하는 것입니다.
+당신의 임무는 문자열을 취하고 모든 모음이 제거 된 새로운 문자열을 반환하는 함수를 작성하는 것입니다.
+예를 들어 "This website is LOSERS LOL!"이라는 문자열입니다. "Ths wbst s fr lsrs LL"이 될 것입니다.
+주 :이 kata y는 모음으로 간주되지 않습니다.
+    */
+
+    [TestFixture]
+    public class DisemvowelTest
+    {
+        [Test]
+        public void ShouldRemoveAllVowels()
+        {
+            Assert.AreEqual("", Kata.Disemvowel("aeiou"));
+            Assert.AreEqual("", Kata.Disemvowel("AEIOU"));
+            Assert.AreEqual("", Kata.Disemvowel(""));
+            Assert.AreEqual("_b", Kata.Disemvowel("A_b"));
+            Assert.AreEqual("Ths wbst s fr lsrs LL!", Kata.Disemvowel("This website is for losers LOL!"));
+        }
+    }
+
+    public static class Kata
+    {
+        public static string Disemvowel(string str)
+        {
+            var vowels = "aeiouAEIOU";
+            return new string(str.Where(x => !vowels.Contains(x)).ToArray());
+        }
+    }
+}
+
+namespace PascalTriagle
+{
+    /*
+     * Wikipedia article on Pascal's Triangle: http://en.wikipedia.org/wiki/Pascal's_triangle
+     Write a function that, given a depth (n), returns a single-dimensional array representing Pascal's Triangle to the n-th level.
+    */
+
+    [TestFixture]
+    public class PascalsTriangleTests
+    {
+        [Test]
+        public static void Level1()
+        {
+            Assert.AreEqual(new List<int> { 1 }, Kata.PascalsTriangle(1));
+            Assert.AreEqual(new List<int> { 1, 1, 1 }, Kata.PascalsTriangle(2));
+            Assert.AreEqual(new List<int> { 1, 1, 1, 1, 2, 1 }, Kata.PascalsTriangle(3));
+            Assert.AreEqual(new List<int> { 1, 1, 1, 1, 2, 1, 1, 3, 3, 1 }, Kata.PascalsTriangle(4));
+            Assert.AreEqual(new List<int> { 1, 1, 1, 1, 2, 1, 1, 3, 3, 1, 1, 4, 6, 4, 1 }, Kata.PascalsTriangle(5));
+        }
+    }
+
+    //다음엔 재귀를 쓰지 않고 풀어볼 것.
+    public static class Kata
+    {
+        public static List<int> PascalsTriangle(int n)
+        {
+            var result = new List<int>();
+            for (int i = 1; i <= n; i++)
+            {
+                result.AddRange(RecursivePascal(i));
+            }
+            return result;
+        }
+
+        public static List<int> RecursivePascal(int rank)
+        {
+            if (rank == 1)
+            {
+                return new List<int> { 1 };
+            }
+            else
+            {
+                var prevPascal = RecursivePascal(rank - 1);
+                var result = new List<int>();
+                for (int index = 0; index < rank; index++)
+                {
+                    if (index == 0 || index == rank - 1)
+                    {
+                        result.Add(1);
+                    }
+                    else
+                    {
+                        result.Add(prevPascal[index] + prevPascal[index - 1]);
+                    }
+                }
+                return result;
+            }
+        }
+    }
+}
