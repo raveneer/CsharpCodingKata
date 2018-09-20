@@ -1,8 +1,9 @@
-﻿using NUnit.Framework;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using NUnit.Framework;
 
 namespace Kata
 {
@@ -91,9 +92,9 @@ namespace GausNeddHelp
                     yield return new TestCaseData(1).Returns(1);
                     yield return new TestCaseData(2).Returns(3);
                     yield return new TestCaseData(3).Returns(6);
-                    yield return new TestCaseData(100l).Returns(5050l);
-                    yield return new TestCaseData(300l).Returns(45150l);
-                    yield return new TestCaseData(50000l).Returns(1250025000l);
+                    yield return new TestCaseData(100L).Returns(5050L);
+                    yield return new TestCaseData(300L).Returns(45150L);
+                    yield return new TestCaseData(50000L).Returns(1250025000L);
                     yield return new TestCaseData(0).Returns(null);
                 }
             }
@@ -167,11 +168,11 @@ namespace TakeTenmin
             [Test]
             public void SampleTest()
             {
-                Assert.AreEqual(true, Kata.IsValidWalk(new string[] { "n", "s", "n", "s", "n", "s", "n", "s", "n", "s" }), "should return true");
-                Assert.AreEqual(true, Kata.IsValidWalk(new string[] { "n", "e", "w", "s", "n", "e", "w", "s", "n", "s" }), "should return true");
-                Assert.AreEqual(false, Kata.IsValidWalk(new string[] { "w", "e", "w", "e", "w", "e", "w", "e", "w", "e", "w", "e" }), "should return false");
-                Assert.AreEqual(false, Kata.IsValidWalk(new string[] { "w" }), "should return false");
-                Assert.AreEqual(false, Kata.IsValidWalk(new string[] { "n", "n", "n", "s", "n", "s", "n", "s", "n", "s" }), "should return false");
+                Assert.AreEqual(true, Kata.IsValidWalk(new[] { "n", "s", "n", "s", "n", "s", "n", "s", "n", "s" }), "should return true");
+                Assert.AreEqual(true, Kata.IsValidWalk(new[] { "n", "e", "w", "s", "n", "e", "w", "s", "n", "s" }), "should return true");
+                Assert.AreEqual(false, Kata.IsValidWalk(new[] { "w", "e", "w", "e", "w", "e", "w", "e", "w", "e", "w", "e" }), "should return false");
+                Assert.AreEqual(false, Kata.IsValidWalk(new[] { "w" }), "should return false");
+                Assert.AreEqual(false, Kata.IsValidWalk(new[] { "n", "n", "n", "s", "n", "s", "n", "s", "n", "s" }), "should return false");
             }
         }
     }
@@ -336,18 +337,18 @@ Every possible number of people that can be in the house.
         {
             var kata = new Kata();
 
-            Assert.AreEqual(new int[] { 1 }, kata.HouseOfCats(2));
-            Assert.AreEqual(new int[] { 0, 2 }, kata.HouseOfCats(4));
-            Assert.AreEqual(new int[] { 1, 3 }, kata.HouseOfCats(6));
-            Assert.AreEqual(new int[] { 0, 2, 4 }, kata.HouseOfCats(8));
-            Assert.AreEqual(new int[] { 0, 2 }, kata.HouseOfCats(4));
-            Assert.AreEqual(new int[] { 0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22 }, kata.HouseOfCats(44));
+            Assert.AreEqual(new[] { 1 }, kata.HouseOfCats(2));
+            Assert.AreEqual(new[] { 0, 2 }, kata.HouseOfCats(4));
+            Assert.AreEqual(new[] { 1, 3 }, kata.HouseOfCats(6));
+            Assert.AreEqual(new[] { 0, 2, 4 }, kata.HouseOfCats(8));
+            Assert.AreEqual(new[] { 0, 2 }, kata.HouseOfCats(4));
+            Assert.AreEqual(new[] { 0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22 }, kata.HouseOfCats(44));
         }
 
         [Test]
         public void Test_Enumerable()
         {
-            Assert.AreEqual(new int[] { 1, 2, 3 }, Enumerable.Range(1, 3));
+            Assert.AreEqual(new[] { 1, 2, 3 }, Enumerable.Range(1, 3));
         }
     }
 
@@ -397,7 +398,7 @@ namespace Isograms
         {
             var str = "abacd";
             var result = str.ToCharArray().Distinct();
-            Assert.AreEqual(new char[] { 'a', 'b', 'c', 'd' }, result.ToArray());
+            Assert.AreEqual(new[] { 'a', 'b', 'c', 'd' }, result.ToArray());
         }
     }
 
@@ -486,23 +487,379 @@ namespace PascalTriagle
             {
                 return new List<int> { 1 };
             }
-            else
+            var prevPascal = RecursivePascal(rank - 1);
+            var result = new List<int>();
+            for (int index = 0; index < rank; index++)
             {
-                var prevPascal = RecursivePascal(rank - 1);
-                var result = new List<int>();
-                for (int index = 0; index < rank; index++)
+                if (index == 0 || index == rank - 1)
                 {
-                    if (index == 0 || index == rank - 1)
-                    {
-                        result.Add(1);
-                    }
-                    else
-                    {
-                        result.Add(prevPascal[index] + prevPascal[index - 1]);
-                    }
+                    result.Add(1);
                 }
-                return result;
+                else
+                {
+                    result.Add(prevPascal[index] + prevPascal[index - 1]);
+                }
             }
+            return result;
+        }
+    }
+}
+
+namespace ConsecutiveString
+{
+    /*
+    strarr문자열 배열 과 정수 가 주어진다 k.당신의 작업은 배열에서 취한 k 개의 연속 된 문자열 로 구성된 첫 번째 가장 긴 문자열 을 반환하는 것입니다.
+    예제 : longest_consec ( ""zone ","abigail ","theta ","form ","libe ","zas ","theta ","abigail "], 2) ->"abigailtheta "
+    n은 문자열 배열의 길이이고, if n = 0또는 k > n또는 k <= 0""를 반환합니다.
+    */
+
+    [TestFixture]
+    public static class LongestConsecutivesTests
+    {
+        private static void testing(string actual, string expected)
+        {
+            Assert.AreEqual(expected, actual);
+        }
+
+        [Test]
+        public static void test1()
+        {
+            Console.WriteLine("Basic Tests");
+            testing(LongestConsecutives.LongestConsec(new[] { "a", "bb", "ccc", "d" }, 2), "bbccc");
+            testing(LongestConsecutives.LongestConsec(new[] { "a", "bb", "ccc", "d" }, 1), "ccc");
+            testing(LongestConsecutives.LongestConsec(new[] { "a", "bb", "ccc", "dddddd" }, 1), "dddddd");
+            testing(LongestConsecutives.LongestConsec(new[] { "a", "bb", "ccc", "d" }, 0), "");
+            testing(LongestConsecutives.LongestConsec(new[] { "zone", "abigail", "theta", "form", "libe", "zas", "theta", "abigail" }, 2), "abigailtheta");
+            testing(LongestConsecutives.LongestConsec(new[] { "ejjjjmmtthh", "zxxuueeg", "aanlljrrrxx", "dqqqaaabbb", "oocccffuucccjjjkkkjyyyeehh" }, 1), "oocccffuucccjjjkkkjyyyeehh");
+            testing(LongestConsecutives.LongestConsec(new String[] { }, 3), "");
+            testing(LongestConsecutives.LongestConsec(new[] { "itvayloxrp", "wkppqsztdkmvcuwvereiupccauycnjutlv", "vweqilsfytihvrzlaodfixoyxvyuyvgpck" }, 2), "wkppqsztdkmvcuwvereiupccauycnjutlvvweqilsfytihvrzlaodfixoyxvyuyvgpck");
+
+            testing(LongestConsecutives.LongestConsec(new[] { "zone", "abigail", "theta", "form", "libe", "zas" }, -2), "");
+
+            testing(LongestConsecutives.LongestConsec(new[] { "it", "wkppv", "ixoyx", "3452", "zzzzzzzzzzzz" }, 15), "");
+            testing(LongestConsecutives.LongestConsec(new[] { "it", "wkppv", "ixoyx", "3452", "zzzzzzzzzzzz" }, 0), "");
+
+            testing(LongestConsecutives.LongestConsec(new[] { "wlwsasphmxx", "owiaxujylentrklctozmymu", "wpgozvxxiu" }, 2), "wlwsasphmxxowiaxujylentrklctozmymu");
+            testing(LongestConsecutives.LongestConsec(new[] { "it", "wkppv", "ixoyx", "3452", "zzzzzzzzzzzz" }, 3), "ixoyx3452zzzzzzzzzzzz");
+        }
+    }
+
+    public class LongestConsecutives
+    {
+        public static string LongestConsec(string[] strarr, int k)
+        {
+            var result = "";
+            for (int i = 0; i <= strarr.Length - k; i++)
+            {
+                var current = string.Join("", strarr.Skip(i).Take(k));
+                if (current.Length > result.Length)
+                {
+                    result = current;
+                }
+            }
+            return result;
+        }
+    }
+}
+
+namespace Factorial
+{
+    /*
+    strarr문자열 배열 과 정수 가 주어진다 k.당신의 작업은 배열에서 취한 k 개의 연속 된 문자열 로 구성된 첫 번째 가장 긴 문자열 을 반환하는 것입니다.
+    예제 : longest_consec ( ""zone ","abigail ","theta ","form ","libe ","zas ","theta ","abigail "], 2) ->"abigailtheta "
+    n은 문자열 배열의 길이이고, if n = 0또는 k > n또는 k <= 0""를 반환합니다.
+    */
+
+    [TestFixture]
+    public class FactorialTests
+    {
+        [Test]
+        public void FactorialOf0ShouldBe1()
+        {
+            Assert.AreEqual(1, Kata.Factorial(0));
+        }
+
+        [Test]
+        public void FactorialOf1ShouldBe1()
+        {
+            Assert.AreEqual(1, Kata.Factorial(1));
+        }
+
+        [Test]
+        public void FactorialOf2ShouldBe2()
+        {
+            Assert.AreEqual(2, Kata.Factorial(2));
+        }
+
+        [Test]
+        public void FactorialOf3ShouldBe6()
+        {
+            Assert.AreEqual(6, Kata.Factorial(3));
+        }
+
+        [Test]
+        public void Test_Odd()
+        {
+            Assert.AreEqual(1, Kata.OddCount(1));
+            Assert.AreEqual(1, Kata.OddCount(2));
+            Assert.AreEqual(7, Kata.OddCount(15));
+            Assert.AreEqual(7511, Kata.OddCount(15023));
+        }
+
+        [TestFixture]
+        public class BasicTests
+        {
+            private static IEnumerable<TestCaseData> testCases
+            {
+                get
+                {
+                    yield return new TestCaseData(1).Returns(1)
+                        .SetDescription("Arguments: (n: 1)\n      Expected: 1");
+                    yield return new TestCaseData(2).Returns(10)
+                        .SetDescription("Arguments: (n: 2)\n      Expected: 10");
+                    yield return new TestCaseData(3).Returns(11)
+                        .SetDescription("Arguments: (n: 3)\n      Expected: 11");
+                    yield return new TestCaseData(5).Returns(101)
+                        .SetDescription("Arguments: (n: 5)\n      Expected: 101");
+                }
+            }
+
+            [Test, TestCaseSource("testCases")]
+            public int Test(int n) =>
+                Kata.ToBinary(n);
+        }
+
+        [Test]
+        public void CorrectTests()
+        {
+            Assert.AreEqual("LONDON", Kata.Correct("L0ND0N"));
+            Assert.AreEqual("DUBLIN", Kata.Correct("DUBL1N"));
+            Assert.AreEqual("SINGAPORE", Kata.Correct("51NGAP0RE"));
+            Assert.AreEqual("BUDAPEST", Kata.Correct("BUDAPE5T"));
+            Assert.AreEqual("PARIS", Kata.Correct("PAR15"));
+        }
+
+        [TestFixture]
+        public class FeastTest
+        {
+            [TestCase("great blue heron", "garlic naan")]
+            [TestCase("chickadee", "chocolate cake")]
+            public void BasicTestsTrue(string beast, string dish)
+            {
+                Assert.IsTrue(Kata.Feast(beast, dish));
+            }
+
+            [TestCase("brown bear", "bear claw")]
+            public void BasicTestsFalse(string beast, string dish)
+            {
+                Assert.IsFalse(Kata.Feast(beast, dish));
+            }
+        }
+
+        /*[TestFixture]
+        public class SolutionTest
+        {
+            [Test, Description("It should work for basic tests")]
+            public void SampleTest()
+            {
+                Assert.AreEqual("Hi", Kata.Remove("Hi!", 1));
+                Assert.AreEqual("Hi", Kata.Remove("Hi!", 100));
+                Assert.AreEqual("Hi!!", Kata.Remove("Hi!!!", 1));
+                Assert.AreEqual("Hi", Kata.Remove("Hi!!!", 100));
+                Assert.AreEqual("Hi", Kata.Remove("!Hi", 1));
+                Assert.AreEqual("Hi!", Kata.Remove("!Hi!", 1));
+                Assert.AreEqual("Hi", Kata.Remove("!Hi!", 100));
+                Assert.AreEqual("!!Hi !!hi!!! !hi", Kata.Remove("!!!Hi !!hi!!! !hi", 1));
+                Assert.AreEqual("Hi !!hi!!! !hi", Kata.Remove("!!!Hi !!hi!!! !hi", 3));
+                Assert.AreEqual("Hi hi!!! !hi", Kata.Remove("!!!Hi !!hi!!! !hi", 5));
+                Assert.AreEqual("Hi hi hi", Kata.Remove("!!!Hi !!hi!!! !hi", 100));
+            }
+        }*/
+
+        [TestFixture]
+        public class SolutionTest
+        {
+            [Test]
+            public void SampleTest()
+            {
+                Assert.AreEqual(1, Kata.СenturyFromYear(1));
+                Assert.AreEqual(1, Kata.СenturyFromYear(100));
+                Assert.AreEqual(18, Kata.СenturyFromYear(1705));
+                Assert.AreEqual(19, Kata.СenturyFromYear(1900));
+                Assert.AreEqual(17, Kata.СenturyFromYear(1601));
+                Assert.AreEqual(20, Kata.СenturyFromYear(2000));
+            }
+        }
+
+        [TestFixture]
+        public class Tests
+        {
+            private static IEnumerable<TestCaseData> sampleTestCases
+            {
+                get
+                {
+                    yield return new TestCaseData(new[] { 0 }).Returns(0);
+                    yield return new TestCaseData(new[] { 1 }).Returns(1);
+                    yield return new TestCaseData(new[] { 2 }).Returns(4);
+                    yield return new TestCaseData(new[] { 1, 2, 2 }).Returns(9);
+                    yield return new TestCaseData(new[] { 1, 2 }).Returns(5);
+                    yield return new TestCaseData(new[] { 5, 3, 4 }).Returns(50);
+                }
+            }
+
+            [Test, TestCaseSource("sampleTestCases"), Description("Sample Tests")]
+            public int SampleTest(int[] n) => Kata.SquareSum(n);
+        }
+
+        [TestFixture]
+        public class Test
+        {
+            [Test]
+            public void Test1()
+            {
+                StringAssert.AreEqualIgnoringCase("loquen", Kata.Remove_char("eloquent"));
+                StringAssert.AreEqualIgnoringCase("ountr", Kata.Remove_char("country"));
+                StringAssert.AreEqualIgnoringCase("erso", Kata.Remove_char("person"));
+                StringAssert.AreEqualIgnoringCase("lac", Kata.Remove_char("place"));
+                StringAssert.AreEqualIgnoringCase("", Kata.Remove_char("ok"));
+            }
+        }
+
+        [TestFixture]
+        public class Tests_Light
+        {
+            [TestCase("green", "yellow")]
+            [TestCase("yellow", "red")]
+            [TestCase("red", "green")]
+            public void BasicTests(string s, string expected)
+            {
+                Assert.That(Kata.UpdateLight(s), Is.EqualTo(expected));
+            }
+        }
+
+        [TestFixture]
+        public class Test_DutyFree
+        {
+            [Test]
+            public void SampleTest()
+            {
+                Assert.AreEqual(166, Kata.DutyFree(12, 50, 1000));
+                Assert.AreEqual(294, Kata.DutyFree(17, 10, 500));
+                Assert.AreEqual(357, Kata.DutyFree(24, 35, 3000));
+            }
+        }
+    }
+
+    public static class Kata
+    {
+        public static int DutyFree(int normPrice, int Discount, int hol)
+        {
+            return (int)(hol / (normPrice * ((float)Discount / 100)));
+        }
+
+        public static string UpdateLight(string current)
+        {
+            switch (current)
+            {
+                case "green":
+                    return "yellow";
+
+                case "yellow":
+                    return "red";
+
+                case "red":
+                    return "green";
+
+                default:
+                    throw new Exception();
+            }
+        }
+
+        public static string Remove_char(string s)
+        {
+            return s.Remove(0, 1).Remove(s.Length - 2, 1);
+        }
+
+        public static int SquareSum(int[] n)
+        {
+            return n.Sum(x => x * x);
+        }
+
+        public static int СenturyFromYear(int year)
+        {
+            return ((year - 1) / 100) + 1;
+        }
+
+        /*public static string Remove(string s, int n)
+        {
+            for (int i = 0; i < n; i++)
+            {
+                Remove(Array.IndexOf(array, s.Where(x => x == '!').First()));
+            }
+            return s;
+        }*/
+
+        public static bool Feast(string beast, string dish)
+        {
+            return beast.First() == dish.First() && beast.Last() == dish.Last();
+        }
+
+        public static string Correct(string text)
+        {
+            var chars = text.ToCharArray();
+            string result = "";
+            foreach (var cha in chars)
+            {
+                switch (cha)
+                {
+                    case '5':
+                        result += 'S';
+                        break;
+
+                    case '1':
+                        result += 'I';
+                        break;
+
+                    case '0':
+                        result += 'O';
+                        break;
+
+                    default:
+                        result += cha;
+                        break;
+                }
+            }
+            return result;
+        }
+
+        public static int ToBinary(int n)
+        {
+            string binary = Convert.ToString(n, 2);
+            return int.Parse(binary);
+        }
+
+        public static int Factorial(int n)
+        {
+            if (n > 12 || n < 0)
+            {
+                throw new ArgumentOutOfRangeException();
+            }
+
+            if (n == 0)
+            {
+                return 1;
+            }
+
+            return Enumerable.Range(1, n).Aggregate(1, (a, b) => a * b);
+        }
+
+        public static ulong OddCount(ulong i)
+        {
+            if (i == 1)
+            {
+                return 1;
+            }
+            return i / 2;
         }
     }
 }
