@@ -1,9 +1,9 @@
-﻿using System;
+﻿using NUnit.Framework;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
-using NUnit.Framework;
 
 namespace Kata
 {
@@ -748,10 +748,162 @@ namespace Factorial
                 Assert.AreEqual(357, Kata.DutyFree(24, 35, 3000));
             }
         }
+
+        [TestFixture]
+        public class KataTests
+        {
+            [Test]
+            public void BasicTests()
+            {
+                Assert.AreEqual(true, Kata.Check(new object[] { 66, 101 }, 66));
+                Assert.AreEqual(true, Kata.Check(new object[] { 80, 117, 115, 104, 45, 85, 112, 115 }, 45));
+
+                Assert.AreEqual(true, Kata.Check(new object[] { 't', 'e', 's', 't' }, 'e'));
+                Assert.AreEqual(false, Kata.Check(new object[] { "what", "a", "great", "kata" }, "kat"));
+            }
+        }
+
+        [Test]
+        public static void test_Summation()
+        {
+            Assert.AreEqual(1, Kata.summation(1));
+            Assert.AreEqual(36, Kata.summation(8));
+            Assert.AreEqual(253, Kata.summation(22));
+            Assert.AreEqual(5050, Kata.summation(100));
+            Assert.AreEqual(22791, Kata.summation(213));
+        }
+
+        [Test]
+        public void test_bonus_time()
+        {
+            StringAssert.AreEqualIgnoringCase("$100000", Kata.bonus_time(10000, true));
+            StringAssert.AreEqualIgnoringCase("$250000", Kata.bonus_time(25000, true));
+            StringAssert.AreEqualIgnoringCase("$10000", Kata.bonus_time(10000, false));
+            StringAssert.AreEqualIgnoringCase("$60000", Kata.bonus_time(60000, false));
+            StringAssert.AreEqualIgnoringCase("$20", Kata.bonus_time(2, true));
+            StringAssert.AreEqualIgnoringCase("$78", Kata.bonus_time(78, false));
+            StringAssert.AreEqualIgnoringCase("$678900", Kata.bonus_time(67890, true));
+        }
+
+        [TestFixture]
+        public class Test_RemoveAllTheMarkedElementsOfAList
+        {
+            [Test]
+            [TestCase(new int[] { 1, 1, 2, 3, 1, 2, 3, 4 }, new int[] { 1, 3 }, ExpectedResult = new int[] { 2, 2, 4 })]
+            [TestCase(new int[] { 1, 1, 2, 3, 1, 2, 3, 4, 4, 3, 5, 6, 7, 2, 8 }, new int[] { 1, 3, 4, 2 }, ExpectedResult = new int[] { 5, 6, 7, 8 })]
+            [TestCase(new int[] { }, new int[] { 2, 2, 4, 3 }, ExpectedResult = new int[] { })]
+            public static int[] FixedTest(int[] integerList, int[] valuesList)
+            {
+                return Kata.RemoveAllTheMarkedElementsOfAList(integerList, valuesList);
+            }
+        }
+
+        [TestFixture]
+        public class ExpressionsMatter
+        {
+            [TestCase(6, 2, 1, 2)]
+            [TestCase(3, 1, 1, 1)]
+            [TestCase(4, 2, 1, 1)]
+            [TestCase(9, 1, 2, 3)]
+            [TestCase(5, 1, 3, 1)]
+            [TestCase(8, 2, 2, 2)]
+            public void CheckSmallValues(int expected, params int[] a)
+            {
+                Assert.That(Kata.ExpressionsMatter(a[0], a[1], a[2]), Is.EqualTo(expected));
+            }
+
+            [TestCase(020, 5, 1, 3)]
+            [TestCase(105, 3, 5, 7)]
+            [TestCase(035, 5, 6, 1)]
+            [TestCase(008, 1, 6, 1)]
+            [TestCase(014, 2, 6, 1)]
+            [TestCase(048, 6, 7, 1)]
+            public void CheckIntermediateValues(int expected, params int[] a)
+            {
+                Assert.That(Kata.ExpressionsMatter(a[0], a[1], a[2]), Is.EqualTo(expected));
+            }
+
+            [TestCase(060, 02, 10, 03)]
+            [TestCase(027, 01, 08, 03)]
+            [TestCase(126, 09, 07, 02)]
+            [TestCase(020, 01, 01, 10)]
+            [TestCase(018, 09, 01, 01)]
+            [TestCase(300, 10, 05, 06)]
+            [TestCase(012, 01, 10, 01)]
+            public void CheckMixedValues(int expected, params int[] a)
+            {
+                Assert.That(Kata.ExpressionsMatter(a[0], a[1], a[2]), Is.EqualTo(expected));
+            }
+
+            [Test]
+            public void BasicTests()
+            {
+                Assert.AreEqual(new[] { 2, 4, 6 }, Kata.Maps(new[] { 1, 2, 3 }));
+                Assert.AreEqual(new[] { 8, 2, 2, 2, 8 }, Kata.Maps(new[] { 4, 1, 1, 1, 4 }));
+                Assert.AreEqual(new[] { 4, 4, 4, 4, 4, 4 }, Kata.Maps(new[] { 2, 2, 2, 2, 2, 2 }));
+            }
+
+            [Test]
+            public void test_Quote()
+            {
+                Assert.AreEqual("I am not impressed by your performance.", Kata.Quote("george saint pierre"));
+                Assert.AreEqual("I'd like to take this chance to apologize.. To absolutely NOBODY!", Kata.Quote("conor mcgregor"));
+                Assert.AreEqual("I am not impressed by your performance.", Kata.Quote("George Saint Pierre"));
+                Assert.AreEqual("I'd like to take this chance to apologize.. To absolutely NOBODY!", Kata.Quote("Conor McGregor"));
+            }
+        }
     }
 
     public static class Kata
     {
+        public static string Quote(string fighter)
+        {
+            var fighterNameLowered = fighter.ToLower();
+            if (fighterNameLowered == "george saint pierre")
+            {
+                return "I am not impressed by your performance.";
+            }
+            else if (fighterNameLowered == "conor mcgregor")
+            {
+                return "I'd like to take this chance to apologize.. To absolutely NOBODY!";
+            }
+            else
+            {
+                throw new Exception("not valid fighter!");
+            }
+        }
+
+        public static int[] Maps(int[] x)
+        {
+            return x.Select(y => y * 2).ToArray();
+        }
+
+        public static int ExpressionsMatter(int a, int b, int c)
+        {
+            var caases = new int[6] { a + b * c, (a + b) * c, a * b + c, a * (b + c), a + b + c, a * b * c };
+            return caases.Max();
+        }
+
+        public static int[] RemoveAllTheMarkedElementsOfAList(int[] integerList, int[] valuesList)
+        {
+            return integerList.Where(x => !valuesList.Contains(x)).ToArray();
+        }
+
+        public static string bonus_time(int salary, bool bonus)
+        {
+            return $"${salary * (bonus ? 10 : 1)}";
+        }
+
+        public static int summation(int num)
+        {
+            return Enumerable.Range(1, num).Sum();
+        }
+
+        public static bool Check(object[] a, object x)
+        {
+            return a.Contains(x);
+        }
+
         public static int DutyFree(int normPrice, int Discount, int hol)
         {
             return (int)(hol / (normPrice * ((float)Discount / 100)));
