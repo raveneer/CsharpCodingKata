@@ -750,6 +750,40 @@ namespace Factorial
             Assert.AreEqual("found the needle at position 30", FindNeedle(haystack_3));
         }
 
+        [Test]
+        public void Test_CountSheeps()
+        {
+            var sheeps = new bool[] { true, false, true };
+
+            Assert.AreEqual(2, CountSheeps(sheeps));
+        }
+
+        public static int[] SymmetricPoint(int[] p, int[] q)
+        {
+            return new[] { 2 * q[0] - p[0], 2 * q[1] - p[1] };
+        }
+
+        [Test, Description("Your solution should work for some fixed tests")]
+        public void Test_SymmetricPoint()
+        {
+            Assert.AreEqual(new int[] { 2, 2 }, SymmetricPoint(new int[] { 0, 0 }, new int[] { 1, 1 }));
+            Assert.AreEqual(new int[] { -6, -18 }, SymmetricPoint(new int[] { 2, 6 }, new int[] { -2, -6 }));
+            Assert.AreEqual(new int[] { -30, 30 }, SymmetricPoint(new int[] { 10, -10 }, new int[] { -10, 10 }));
+            Assert.AreEqual(new int[] { -25, 37 }, SymmetricPoint(new int[] { 1, -35 }, new int[] { -12, 1 }));
+            Assert.AreEqual(new int[] { -1014, -443 }, SymmetricPoint(new int[] { 1000, 15 }, new int[] { -7, -214 }));
+            Assert.AreEqual(new int[] { 0, 0 }, SymmetricPoint(new int[] { 0, 0 }, new int[] { 0, 0 }));
+        }
+
+        public static int CountSheeps(bool[] sheeps)
+        {
+            if (sheeps == null)
+            {
+                throw new ArgumentException();
+            }
+
+            return sheeps.Count(x => x == true);
+        }
+
         public static string FindNeedle(object[] haystack)
         {
             int foundIndex = Array.IndexOf(haystack, haystack.First(x => x as string == "needle"));
